@@ -57,7 +57,6 @@ public class WishlistSteps {
 
     @Given("a product with id {string} in the wishlist of a client with id {string}")
     public void aProductWithIdInWishlistAddOfClientWithId(String productId, String clientId) {
-        // Chamar o endpoint de adicionar produto à wishlist
         String url = "/wishlist";
         RequestProductDTO requestProductDTO = new RequestProductDTO();
         requestProductDTO.setClientId(clientId);
@@ -81,8 +80,6 @@ public class WishlistSteps {
     public void aClientWithIdWithAWishlist(String clientId) {
         this.clientId = clientId;
 
-        // Lógica para preparar o cenário do cliente com a wishlist
-        // Por exemplo, adicionar produtos à wishlist do cliente
     }
 
     @When("I send a GET request to {string}")

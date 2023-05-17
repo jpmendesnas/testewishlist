@@ -25,5 +25,5 @@ public class Wishlist {
     private String clientId;
 
     @Field("product_ids")
-    private Set<String> productIds = new HashSet<>(); // Inicialização aqui
+    private Set<String> productIds = new HashSet<>();
 }
