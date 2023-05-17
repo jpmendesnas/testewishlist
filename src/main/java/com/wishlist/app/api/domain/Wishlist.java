@@ -1,6 +1,7 @@
 package com.wishlist.app.api.domain;
 
 
+import com.wishlist.app.api.controller.dto.RequestProductDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,4 +27,9 @@ public class Wishlist {
 
     @Field("product_ids")
     private Set<String> productIds = new HashSet<>();
+
+    public Wishlist(RequestProductDTO wishListDTO) {
+        this.clientId = wishListDTO.getClientId();
+        this.getProductIds().add(wishListDTO.getProductId());
+    }
 }

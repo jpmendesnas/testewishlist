@@ -35,24 +35,15 @@ public class WishListServiceImpl implements WishlistService {
 	@Override
 	public WishlistDTO addProduct(RequestProductDTO requestProductDTO) {
 
-		Optional<Wishlist> optionalWishlist = repository.findByClientId(requestProductDTO.getClientId());
+		Wishlist wishlist = repository.findByClientId(requestProductDTO.getClientId())
+				.orElseGet(() -> new Wishlist(requestProductDTO));
 
-		Wishlist wishlist = optionalWishlist.orElseGet(() -> {
-			Wishlist newWishlist = new Wishlist();
-			newWishlist.setClientId(requestProductDTO.getClientId());
-			newWishlist.setProductIds(new HashSet<>());
-			return newWishlist;
-		});
-
-		Set<String> productIds = wishlist.getProductIds();
-		if (productIds.size() >= MAX_PRODUCTS) {
+		if (wishlist.getProductIds().size() >= MAX_PRODUCTS) {
 			throw new WishlistLimitExceededException(MessageUtils.getMessage("limitItemsRequest"));
 		}
 
-		boolean added = productIds.add(requestProductDTO.getProductId());
-		if (added) {
-			repository.save(wishlist);
-		}
+		wishlist.getProductIds().add(requestProductDTO.getProductId());
+		repository.save(wishlist);
 
 		return ModelMapperUtils.getModelMapper().map(wishlist, WishlistDTO.class);
 	}
@@ -60,17 +51,15 @@ public class WishListServiceImpl implements WishlistService {
 
 	@Override
 	public WishlistDTO removeProduct(String clientId, String productId) {
-		Optional<Wishlist> optionalWishlist = repository.findByClientId(clientId);
-		Wishlist wishlist = optionalWishlist.orElseThrow(() ->
-				new NotFoundException(MessageUtils.getMessage("notFoundError", clientId)));
 
-		Set<String> productIds = wishlist.getProductIds();
-		boolean removed = productIds.remove(productId);
-		if (removed) {
-			repository.save(wishlist);
-		} else {
+		Wishlist wishlist = repository.findByClientId(clientId)
+				.orElseThrow(() -> new NotFoundException(MessageUtils.getMessage("notFoundError", clientId)));
+
+		if (!wishlist.getProductIds().remove(productId)) {
 			throw new NotFoundException(MessageUtils.getMessage("notFoundError", productId));
 		}
+
+		repository.save(wishlist);
 
 		return ModelMapperUtils.getModelMapper().map(wishlist, WishlistDTO.class);
 	}
