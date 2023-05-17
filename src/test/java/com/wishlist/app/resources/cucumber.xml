@@ -1,0 +1,6 @@
+<beans>
+    <!-- Configuração dos repositórios -->
+    <bean id="wishlistRepository" class="com.wishlist.app.api.repository.WishlistRepository">
+        <!-- Configuração adicional do repositório, se necessário -->
+    </bean>
+</beans>
