@@ -20,17 +20,12 @@ import java.util.logging.Logger;
 
 @Service
 public class WishListServiceImpl implements WishlistService {
-
-
 	private static final int MAX_PRODUCTS = 20;
 
 	@Autowired
 	private WishlistRepository repository;
 
-
 	static Logger log  = Logger.getLogger(String.valueOf(WishListServiceImpl.class));
-
-
 
 	@Override
 	public WishlistDTO addProduct(RequestProductDTO requestProductDTO) {
