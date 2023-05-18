@@ -51,6 +51,7 @@ public class WishListServiceImpl implements WishlistService {
 		if (!StringUtils.hasText(clientId) || !StringUtils.hasText(productId)) {
 			throw new BadRequestException(MessageUtils.getMessage("badRequest"));
 		}
+
 		Wishlist wishlist = repository.findByClientId(clientId)
 				.orElseThrow(() -> new NotFoundException(MessageUtils.getMessage("notFoundError", clientId)));
 
