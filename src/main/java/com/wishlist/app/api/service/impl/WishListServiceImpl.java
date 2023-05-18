@@ -42,9 +42,11 @@ public class WishListServiceImpl implements WishlistService {
 			throw new WishlistLimitExceededException(MessageUtils.getMessage("limitItemsRequest"));
 		}
 
-		wishlist.getProductIds().add(requestProductDTO.getProductId());
-		repository.save(wishlist);
+		boolean added = wishlist.getProductIds().add(requestProductDTO.getProductId());
 
+		if (added) {
+			repository.save(wishlist);
+		}
 		return ModelMapperUtils.getModelMapper().map(wishlist, WishlistDTO.class);
 	}
 
