@@ -4,12 +4,11 @@ import com.wishlist.app.api.controller.dto.RequestProductDTO;
 import com.wishlist.app.api.service.WishlistService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import javax.validation.Valid;
 
 @Api(value = "Wishlist", description = "Gerenciamento de wishlist", tags = {"WishListEndPoint"})
 @RestController

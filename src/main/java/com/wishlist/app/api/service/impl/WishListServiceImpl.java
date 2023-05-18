@@ -3,15 +3,15 @@ package com.wishlist.app.api.service.impl;
 import com.wishlist.app.api.controller.dto.RequestProductDTO;
 import com.wishlist.app.api.controller.dto.WishlistDTO;
 import com.wishlist.app.api.domain.Wishlist;
-import com.wishlist.app.api.exception.MessageUtils;
-import com.wishlist.app.api.exception.NotFoundException;
-import com.wishlist.app.api.exception.WishListEmptyException;
-import com.wishlist.app.api.exception.WishlistLimitExceededException;
+import com.wishlist.app.api.exception.*;
 import com.wishlist.app.api.repository.WishlistRepository;
 import com.wishlist.app.api.service.WishlistService;
 import com.wishlist.app.api.util.ModelMapperUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -53,7 +53,9 @@ public class WishListServiceImpl implements WishlistService {
 
 	@Override
 	public WishlistDTO removeProduct(String clientId, String productId) {
-
+		if (!StringUtils.hasText(clientId) || !StringUtils.hasText(productId)) {
+			throw new BadRequestException(MessageUtils.getMessage("badRequest"));
+		}
 		Wishlist wishlist = repository.findByClientId(clientId)
 				.orElseThrow(() -> new NotFoundException(MessageUtils.getMessage("notFoundError", clientId)));
 
@@ -68,6 +70,9 @@ public class WishListServiceImpl implements WishlistService {
 
 	@Override
 	public WishlistDTO getWishlist(String clientId) {
+		if (!StringUtils.hasText(clientId)) {
+			throw new BadRequestException(MessageUtils.getMessage("badRequest"));
+		}
 		Wishlist wishlist = repository.findByClientId(clientId)
 				.orElseThrow(() -> new NotFoundException(MessageUtils.getMessage("notFoundError", clientId)));
 
@@ -81,6 +86,10 @@ public class WishListServiceImpl implements WishlistService {
 
 	@Override
 	public boolean isProductInWishlist(String clientId, String productId) {
+		if (!StringUtils.hasText(clientId) || !StringUtils.hasText(productId)) {
+			throw new BadRequestException(MessageUtils.getMessage("badRequest"));
+		}
+
 		Wishlist wishlist = repository.findByClientId(clientId)
 				.orElseThrow(() -> new NotFoundException("Wishlist not found for client ID: " + clientId));
 		return wishlist.getProductIds().contains(productId);
